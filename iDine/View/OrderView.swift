@@ -30,13 +30,12 @@ struct OrderView: View {
             }
             .navigationTitle("Order")
             .listStyle(InsetGroupedListStyle())
-            .navigationBarItems(trailing: EditButton())
+            .toolbar { EditButton() }
         }
     }
     
     func deletItems(at offsets: IndexSet) {
         order.items.remove(atOffsets: offsets)
-        
     }
 }
 

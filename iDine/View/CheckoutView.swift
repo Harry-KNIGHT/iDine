@@ -16,6 +16,10 @@ struct CheckoutView: View {
     static let tipAmounts = [10, 15, 25, 50, 0]
     let paymentTypes = ["Cash", "Credit Card", "iDine Points"]
     
+    @State private var pickupTime = "Now"
+    let pickUpTimes = ["Now", "Tonight", "Tomorrow Morning"]
+    
+    
     @State private var showAlert = false
     
     var totalPrice: Double {
@@ -27,7 +31,14 @@ struct CheckoutView: View {
     
     var body: some View {
         Form {
-            Section {
+            Section(header: Text("Pickup Time")) {
+                Picker("When do you pickup your order ?", selection: $pickupTime) {
+                    ForEach(pickUpTimes, id: \.self) {
+                        Text($0)
+                    }
+                }
+            }
+            Section(header: Text("Payment method")) {
                 Picker("How do you want to pay ?", selection: $paymentType) {
                     ForEach(paymentTypes, id: \.self) {
                         Text($0)
@@ -38,22 +49,20 @@ struct CheckoutView: View {
                 if addLoyaltyDetails {
                     TextField("Enter your iDine ID", text: $loyaltyNumber)
                 }
-                VStack(alignment: .leading) {
-                    Section(header: Text("Add a tip ?")) {
-                        Picker("Percentage:", selection: $tipAmount) {
-                            ForEach(0..<Self.tipAmounts.count, id: \.self) {
-                                Text("\(Self.tipAmounts[$0])%")
-                            }
-                        }.pickerStyle(SegmentedPickerStyle())
-                    }
+            }
+                Section(header: Text("Add a tip ?")) {
+                    Picker("Percentage:", selection: $tipAmount) {
+                        ForEach(0..<Self.tipAmounts.count, id: \.self) {
+                            Text("\(Self.tipAmounts[$0])%")
+                        }
+                    }.pickerStyle(SegmentedPickerStyle())
                 }
-                Section(header: Text("TOTAL: $\(totalPrice.formatted())")) {
-                    Button("Confirm order") {
-                        self.showAlert.toggle()
-                        
-                    }
+            Section(header: Text("TOTAL: $\(totalPrice.formatted())")) {
+                Button("Confirm order") {
+                    self.showAlert.toggle()
                 }
             }
+            
             
         }
         .navigationTitle("Payment")
@@ -65,12 +74,12 @@ struct CheckoutView: View {
         }
     }
 }
-    
-    struct CheckoutView_Previews: PreviewProvider {
-        static var previews: some View {
-            NavigationView {
-                CheckoutView()
-                    .environmentObject(Order())
-            }
+
+struct CheckoutView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            CheckoutView()
+                .environmentObject(Order())
         }
     }
+}
