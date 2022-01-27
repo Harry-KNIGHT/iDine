@@ -42,7 +42,7 @@ extension View {
 }
 struct ItemDetailView: View {
     @EnvironmentObject var order: Order
-//    @State var favItems = [MenuItem]()
+    @State private var NewFavoriteListItems = [String]()
     let item: MenuItem
     var body: some View {
         VStack {
@@ -64,15 +64,19 @@ struct ItemDetailView: View {
             .navigationTitle(item.name)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(trailing: Button(action: {
-             // more code for add to favorites
+                // Struggled all the day for that, it's fixed
+                // order.add(item: item)
+                //                order.items.append(NewFavoriteListItems)
+                //                order.items += NewFavoriteListItems
                 addFavorites(at: item)
-        }) {
-            Image(systemName: "heart")
-        })
+            }) {
+                Image(systemName: "heart")
+            }//.disabled(order.items.contains(item))
+            )
     }
-//    func addFavorites(at indexSet: IndexSet) {
-//        favItems.append(item)
-//     }
+    //    func addFavorites(at indexSet: IndexSet) {
+    //        favItems.append(item)
+    //     }
     
     func addFavorites(at itemNumber: MenuItem) {
         order.add(item: itemNumber)
@@ -82,8 +86,8 @@ struct ItemDetailView: View {
 struct ItemDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-        ItemDetailView(item: MenuItem.example)
-            .environmentObject(Order())
+            ItemDetailView(item: MenuItem.example)
+                .environmentObject(Order())
         }
     }
 }

@@ -10,7 +10,22 @@ import SwiftUI
 struct FavoritesView: View {
     @EnvironmentObject var order: Order
     var body: some View {
-        Text("")
+        List {
+            Section {
+                ForEach(order.items) { item in
+                    HStack {
+                        Text(item.name)
+                    }
+                }.onDelete(perform: deletFav)
+            }
+        }
+        .navigationTitle("Favorites")
+        .toolbar {
+            EditButton()
+        }
+    }
+    func deletFav(at offsets: IndexSet) {
+        order.items.remove(atOffsets: offsets)
     }
 }
 
@@ -18,7 +33,7 @@ struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
         FavoritesView()
-            .environmentObject(Order())
+                .environmentObject(Order())
         }
     }
 }
